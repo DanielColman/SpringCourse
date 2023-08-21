@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -30,8 +31,12 @@ public class UserService {
         users.add(new User(faker.funnyName().name(), faker.name().username(), faker.internet().password()));
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<User> getUsers(String startWith) {
+        if(startWith != null){
+            return users.stream().filter(u->u.getUserName().startsWith(startWith)).collect(Collectors.toList());
+        }else{
+            return users;
+        }
     }
 
     public User getUsersByUserName(String username) {
@@ -52,6 +57,12 @@ public class UserService {
        userToBeUpdated.setNickName(user.getNickName());
        userToBeUpdated.setPassword(user.getPassword());
 
-        return userToBeUpdated;
+       return userToBeUpdated;
     }
+    public void deleteUser(String username) {
+       User userToBeDeleted = getUsersByUserName(username);
+       users.remove(userToBeDeleted);
+    }
+
+
 }

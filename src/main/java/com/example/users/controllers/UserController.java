@@ -17,8 +17,8 @@ public class UserController {
     private UserService userService;
     @GetMapping
     //Metodo HTTP + Recurso --> Handler methods.
-    public ResponseEntity<List<User>> getUsers(){
-        return new ResponseEntity<List<User>>(userService.getUsers(), HttpStatus.OK);
+    public ResponseEntity<List<User>> getUsers(@RequestParam(value = "startWith", required = false)String startWith){
+        return new ResponseEntity<List<User>>(userService.getUsers(startWith), HttpStatus.OK);
     }
 
     @GetMapping(value="/{username}")
@@ -34,6 +34,11 @@ public class UserController {
     @PutMapping(value="/{username}")
     public ResponseEntity<User> updateUser(@PathVariable("username")String username, @RequestBody User user){
         return new ResponseEntity<User> (userService.updateUser(user, username), HttpStatus.OK);
+    }
+    @DeleteMapping("/{username}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("username")String username){
+        userService.deleteUser(username);
+        return new ResponseEntity<> (HttpStatus.NO_CONTENT);
     }
 
 }
