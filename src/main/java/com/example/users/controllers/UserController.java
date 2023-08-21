@@ -5,10 +5,7 @@ import com.example.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +25,15 @@ public class UserController {
     public ResponseEntity<User> getUsersByUsername(@PathVariable("username") String username){
         return new ResponseEntity<User> (userService.getUsersByUserName(username), HttpStatus.OK);
     }
+
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user){
+        return new ResponseEntity<User> (userService.createUser(user), HttpStatus.CREATED);
+    }
+
+    @PutMapping(value="/{username}")
+    public ResponseEntity<User> updateUser(@PathVariable("username")String username, @RequestBody User user){
+        return new ResponseEntity<User> (userService.updateUser(user, username), HttpStatus.OK);
+    }
+
 }

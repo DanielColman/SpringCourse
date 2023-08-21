@@ -39,4 +39,19 @@ public class UserService {
                 .findAny().orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User %s not found ", username)));
     }
+
+    public User createUser(User user) {
+        if(users.stream().anyMatch(u->u.getUserName().equals(user.getUserName()))) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("User %s already exists ", user.getUserName()));
+        }
+        users.add(user);
+        return user;
+    }
+    public User updateUser(User user, String username) {
+       User userToBeUpdated = getUsersByUserName(username);
+       userToBeUpdated.setNickName(user.getNickName());
+       userToBeUpdated.setPassword(user.getPassword());
+
+        return userToBeUpdated;
+    }
 }
